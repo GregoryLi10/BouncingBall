@@ -26,22 +26,33 @@ public class Pong extends JPanel implements KeyListener {
 	private boolean up1, down1, up2, down2; 		// booleans to keep track of paddle movement
 	private boolean solo = false;
 	
-	private int bvx=1;
-	private int bvy=2;
+	private int bvx=2;
+	private int bvy=3;
 	private int bx=WIDTH/2;
 	private int by=HEIGHT/2;
 	private int r1x=0;
 	private int r1y=0;
 	private int r2x=WIDTH-PADDLE_WIDTH;
 	private int r2y=0;
+	private int p1s=0;
+	private int p2s=0;
 	
 	
 	// move the ball according to its current velocity
 	public void move_ball() {
 		
-        if (bx + bvx < 0 || bx + DIAM + bvx > WIDTH) {
-            bvx=bvx*-1;
+        if (bx + bvx < 0) {
+        	p2s=p2s+1;
+        	bx=WIDTH/2;
+            by=HEIGHT/2;
         }
+        
+        if (bx + DIAM + bvx > WIDTH) {
+        	p1s=p1s+1;
+        	bx=WIDTH/2;
+            by=HEIGHT/2;
+        }
+        
         if (by + bvy < 0 || by + DIAM + bvy > HEIGHT) {
             bvy=bvy*-1;
         }
@@ -114,6 +125,9 @@ public class Pong extends JPanel implements KeyListener {
 		g.setColor(Color.red);
 		g.drawString("P1 Score: ", WIDTH/5, 20);
 		g.drawString("P2 Score: ", WIDTH*3/5, 20);
+		g.drawString(String.valueOf(p1s), WIDTH/5+100, 20);
+		g.drawString(String.valueOf(p2s), WIDTH*3/5+100, 20);
+		
 	}
 
 	// defines what we want to happen if a keyboard button has 
