@@ -27,32 +27,19 @@ public class Pong extends JPanel implements KeyListener {
 	private boolean solo = false;
 	
 	private int bvx=2;
-	private int bvy=3;
+	private int bvy=1;
 	private int bx=WIDTH/2;
 	private int by=HEIGHT/2;
 	private int r1x=0;
-	private int r1y=0;
+	private int r1y=HEIGHT/2;
 	private int r2x=WIDTH-PADDLE_WIDTH;
-	private int r2y=0;
+	private int r2y=HEIGHT/2;
 	private int p1s=0;
 	private int p2s=0;
 	
 	
 	// move the ball according to its current velocity
 	public void move_ball() {
-		
-        if (bx + bvx < 0) {
-        	p2s=p2s+1;
-        	bx=WIDTH/2;
-            by=HEIGHT/2;
-        }
-        
-        if (bx + DIAM + bvx > WIDTH) {
-        	p1s=p1s+1;
-        	bx=WIDTH/2;
-            by=HEIGHT/2;
-        }
-        
         if (by + bvy < 0 || by + DIAM + bvy > HEIGHT) {
             bvy=bvy*-1;
         }
@@ -66,19 +53,30 @@ public class Pong extends JPanel implements KeyListener {
 		
 		if (up1==true) {
 			r1y=r1y-PADDLE_SPEED;
+			if (r1y<0){
+				r1y=r1y+PADDLE_SPEED;
+			}
 		}
 		if (down1==true) {
 			r1y=r1y+PADDLE_SPEED;
+			if (r1y>HEIGHT-PADDLE_HEIGHT){
+				r1y=r1y-PADDLE_SPEED;
+			}
 		}
 		
 		if (up2==true) {
 			r2y=r2y-PADDLE_SPEED;
+			if (r2y<0){
+				r2y=r2y+PADDLE_SPEED;
+			}
 		}
 		
 		if (down2==true) {
 			r2y=r2y+PADDLE_SPEED;
+			if (r2y>HEIGHT-PADDLE_HEIGHT){
+				r2y=r2y-PADDLE_SPEED;
+			}
 		}
-		
 		
 	}
 	
@@ -88,17 +86,43 @@ public class Pong extends JPanel implements KeyListener {
 	public void check_collisions() {
 		
 		if (bx<r1x+PADDLE_WIDTH&&by<r1y+PADDLE_HEIGHT&&by>r1y) {
-			bvx=bvx*-1;
-			bvy=bvy*-1;
+			bvx=-(int) ((Math.random()*10)%2+1);
+			bvy=-(int) ((Math.random()*10)%2+1);
+			bvx=(int) (bvx*-1);
+			bvy=(int) (bvy*-1);
 		}
 		
 		if (bx>r2x-PADDLE_WIDTH&&by<r2y+PADDLE_HEIGHT&&by>r2y) {
-			bvx=bvx*-1;
-			bvy=bvy*-1;
+			bvx=(int) ((Math.random()*10)%2+1);
+			bvy=(int) ((Math.random()*10)%2+1);
+			bvx=(int) (bvx*-1);
+			bvy=(int) (bvy*-1);
 		}
-		
+
+        if (bx + bvx < 0) {
+        	p2s=p2s+1;
+        	bx=WIDTH/2;
+            by=HEIGHT/2;
+            r1y=HEIGHT/2;
+        	r2y=HEIGHT/2;
+        }
+        
+        if (bx + DIAM + bvx > WIDTH) {
+        	p1s=p1s+1;
+        	bx=WIDTH/2;
+            by=HEIGHT/2;
+        	r1y=HEIGHT/2;
+        	r2y=HEIGHT/2;
+        }
 	}
 	
+	public void soloPlay() {
+		while (solo=true){
+			r1y=by;
+			up1=false;
+			down1=false;
+		}
+	}
 
 	// defines what we want to happen anytime we draw the game
 	// you simply need to fill in a few parameters here
@@ -129,6 +153,7 @@ public class Pong extends JPanel implements KeyListener {
 		g.drawString(String.valueOf(p2s), WIDTH*3/5+100, 20);
 		
 	}
+	
 
 	// defines what we want to happen if a keyboard button has 
 	// been pressed - you need to complete this
@@ -151,11 +176,11 @@ public class Pong extends JPanel implements KeyListener {
 			
 		// turn 1-player mode on
 		if (e.getKeyChar() == '1')
-			// fill this in
+			solo=true;
 			
 		// turn 2-player mode on
 		if (e.getKeyChar() == '2') {
-			
+			solo=false;
 		}
 			// fill this in
 	}
@@ -184,7 +209,9 @@ public class Pong extends JPanel implements KeyListener {
 	// restarts the game, including scores
 	public void restart() {
 
-		// your code here
+		p1s=0;
+		p2s=0;
+		
 	}
 
 	//////////////////////////////////////
