@@ -1,4 +1,13 @@
 // filler code for pong provided by Mr. David
+// Controls:
+// W - left paddle up
+// S - left paddle down
+// up - right paddle up
+// down - right paddle down
+// 1 - single player
+// 2 - two player
+// p - pause
+// space - resume
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -36,48 +45,56 @@ public class Pong extends JPanel implements KeyListener {
 	private int r2y=HEIGHT/2;
 	private int p1s=0;
 	private int p2s=0;
+	private boolean pause=true;
 	
 	
 	// move the ball according to its current velocity
 	public void move_ball() {
-        if (by + bvy < 0 || by + DIAM + bvy > HEIGHT) {
-            bvy=bvy*-1;
-        }
-        bx=bx+bvx;
-        by=by+bvy;
+		if (pause==false){
+			if (by + bvy < 0 || by + DIAM + bvy > HEIGHT) {
+	            bvy=bvy*-1;
+	        }
+	        bx=bx+bvx;
+	        by=by+bvy;
+		}
 	}
 	
 	
 	// this method moves the paddles at each timestep
 	public void move_paddles() {
-		
-		if (up1==true) {
-			r1y=r1y-PADDLE_SPEED;
-			if (r1y<0){
-				r1y=r1y+PADDLE_SPEED;
+		if (pause==false) {
+			if (solo==true) {
+				
+	//			r1y=by-PADDLE_HEIGHT/2;
+				
+				while (r1y+PADDLE_HEIGHT/2<by&&r1y<HEIGHT-PADDLE_HEIGHT) {
+					r1y+=PADDLE_SPEED;
+				}
+				while (r1y+PADDLE_HEIGHT/2>by&&r1y>0) {
+					r1y-=PADDLE_SPEED;
+				}
 			}
-		}
-		if (down1==true) {
-			r1y=r1y+PADDLE_SPEED;
-			if (r1y>HEIGHT-PADDLE_HEIGHT){
+			if (up1==true&&r1y>0&&solo==false) {
 				r1y=r1y-PADDLE_SPEED;
+				if (r1y<0){
+					r1y=r1y+PADDLE_SPEED;
+				}
 			}
-		}
-		
-		if (up2==true) {
-			r2y=r2y-PADDLE_SPEED;
-			if (r2y<0){
+			if (down1==true&&r1y<HEIGHT-PADDLE_HEIGHT&&solo==false) {
+				r1y=r1y+PADDLE_SPEED;
+				if (r1y>HEIGHT-PADDLE_HEIGHT){
+					r1y=r1y-PADDLE_SPEED;
+				}
+			}
+			
+			if (up2==true&&r2y>0) {
+				r2y=r2y-PADDLE_SPEED;
+			}
+			
+			if (down2==true&&r2y<HEIGHT-PADDLE_HEIGHT) {
 				r2y=r2y+PADDLE_SPEED;
 			}
 		}
-		
-		if (down2==true) {
-			r2y=r2y+PADDLE_SPEED;
-			if (r2y>HEIGHT-PADDLE_HEIGHT){
-				r2y=r2y-PADDLE_SPEED;
-			}
-		}
-		
 	}
 	
 	// this method checks if there are any bounces to take care of,
@@ -105,6 +122,7 @@ public class Pong extends JPanel implements KeyListener {
             by=HEIGHT/2;
             r1y=HEIGHT/2;
         	r2y=HEIGHT/2;
+        	pause=true;
         }
         
         if (bx + DIAM + bvx > WIDTH) {
@@ -113,16 +131,10 @@ public class Pong extends JPanel implements KeyListener {
             by=HEIGHT/2;
         	r1y=HEIGHT/2;
         	r2y=HEIGHT/2;
+        	pause=true;
         }
 	}
 	
-	public void soloPlay() {
-		while (solo=true){
-			r1y=by;
-			up1=false;
-			down1=false;
-		}
-	}
 
 	// defines what we want to happen anytime we draw the game
 	// you simply need to fill in a few parameters here
@@ -152,6 +164,12 @@ public class Pong extends JPanel implements KeyListener {
 		g.drawString(String.valueOf(p1s), WIDTH/5+100, 20);
 		g.drawString(String.valueOf(p2s), WIDTH*3/5+100, 20);
 		
+		if (pause==true) {
+			Font font = new Font("Arial", Font.BOLD, 20);
+			g.setFont(font);
+			g.setColor(Color.white);
+			g.drawString("game paused, click space to resume", WIDTH/5, HEIGHT/5);
+		}
 	}
 	
 
@@ -182,7 +200,13 @@ public class Pong extends JPanel implements KeyListener {
 		if (e.getKeyChar() == '2') {
 			solo=false;
 		}
-			// fill this in
+		
+		if (e.getKeyChar()==' ') {
+			pause=false;
+		}
+		if (e.getKeyChar()=='p') {
+			pause=true;
+		}
 	}
 
 	// defines what we want to happen if a keyboard button
