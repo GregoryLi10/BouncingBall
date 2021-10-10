@@ -1,4 +1,5 @@
 // filler code for pong provided by Mr. David
+// Name: Gregory Li
 // Controls:
 // W - left paddle up
 // S - left paddle down
@@ -29,6 +30,7 @@ public class Pong extends JPanel implements KeyListener {
 	private final int WIDTH = 600, HEIGHT = 600, WINDOW_HEIGHT = 650;
 	private final int PADDLE_WIDTH = 20, DIAM = 20, PADDLE_HEIGHT = 100;
 	private final int PADDLE_SPEED = 3;
+	private final int POW_DIAM=60;
 
 	
 	// your instance variables here, I've given you a few 
@@ -47,8 +49,8 @@ public class Pong extends JPanel implements KeyListener {
 	private int p2s=0;
 	private boolean pause=true;
 	private boolean pow=false;
-	private int powy;
-	private int powx;
+	private int powx=(int) ((Math.random()*500));
+	private int powy=(int) ((Math.random()*500)+20);
 	
 	
 	// move the ball according to its current velocity
@@ -59,15 +61,12 @@ public class Pong extends JPanel implements KeyListener {
 	        }
 	        bx=bx+bvx;
 	        by=by+bvy;
-	        if (pow==true){
-	        	powx=(int) ((Math.random()*10)%2+10);
-	        	powy=(int) ((Math.random()*10)%2+10);
-	        }
-	        if (pow==false){
-	        	powx=-1;
-	        	powy=-1;
-	        }
-			
+		}
+		if ((p1s+p2s)%3==0) {
+			pow=true;
+		}
+		else {
+			pow=false;
 		}
 	}
 	
@@ -77,7 +76,7 @@ public class Pong extends JPanel implements KeyListener {
 		if (pause==false) {
 			if (solo==true) {
 				
-	//			r1y=by-PADDLE_HEIGHT/2;
+	//			r1y=by-PADDLE_HEIGHT/2; (Without while loops)
 				
 				while (r1y+PADDLE_HEIGHT/2<by&&r1y<HEIGHT-PADDLE_HEIGHT) {
 					r1y+=PADDLE_SPEED;
@@ -118,14 +117,12 @@ public class Pong extends JPanel implements KeyListener {
 			bvx=-(int) ((Math.random()*10)%2+1);
 			bvy=-(int) ((Math.random()*10)%2+1);
 			bvx=(int) (bvx*-1);
-			bvy=(int) (bvy*-1);
 		}
 		
 		if (bx>r2x-PADDLE_WIDTH&&by<r2y+PADDLE_HEIGHT&&by>r2y) {
 			bvx=(int) ((Math.random()*10)%2+1);
 			bvy=(int) ((Math.random()*10)%2+1);
 			bvx=(int) (bvx*-1);
-			bvy=(int) (bvy*-1);
 		}
 
         if (bx + bvx < 0) {
@@ -149,6 +146,19 @@ public class Pong extends JPanel implements KeyListener {
 			bvy=(int) ((Math.random()*10)%2+1);
         	pause=true;
         }
+        
+        if (powx+POW_DIAM>bx&&powy+POW_DIAM>by&&powx-DIAM<bx&&powy-DIAM<by&&pow==true) {
+        	if(bvx>0) {
+        		p1s=500;
+        	}
+        	if(bvx<0) {
+        		p2s=500;
+        	}
+        }
+        if (pow==false) {
+        	powx=(int) ((Math.random()*500));
+        	powy=(int) ((Math.random()*500)+20);
+        }
 	}
 	
 
@@ -170,6 +180,13 @@ public class Pong extends JPanel implements KeyListener {
 		g.drawRect(r1x, r1y, PADDLE_WIDTH, PADDLE_HEIGHT);
 		g.fillRect(r2x, r2y, PADDLE_WIDTH, PADDLE_HEIGHT);
 		g.drawRect(r2x, r2y, PADDLE_WIDTH, PADDLE_HEIGHT);
+		if (pow==true) {
+			if (powx<51) {
+				powx+=50;
+			}
+			g.fillRect(powx, powy, POW_DIAM, POW_DIAM);
+			g.drawRect(powx, powy, POW_DIAM, POW_DIAM);
+		}
 		
 		// writes the score of the game - you just need to fill the scores in
 		Font f = new Font("Arial", Font.BOLD, 14);
@@ -257,6 +274,8 @@ public class Pong extends JPanel implements KeyListener {
 		bvy=(int) ((Math.random()*10)%2+1);
 		r1y=HEIGHT/2-PADDLE_HEIGHT/2;
     	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
+    	powx=(int) ((Math.random()*500));
+    	powy=(int) ((Math.random()*500)+20);
     	solo=false;
 		pause=true;
 	}
