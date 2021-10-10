@@ -9,6 +9,7 @@
 // 2 - two player
 // p - pause
 // space - resume
+// powerups - 50x50 yellow squares, when touched by the ball, freezes the opponent's paddle
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,7 +31,7 @@ public class Pong extends JPanel implements KeyListener {
 	private final int WIDTH = 600, HEIGHT = 600, WINDOW_HEIGHT = 650;
 	private final int PADDLE_WIDTH = 20, DIAM = 20, PADDLE_HEIGHT = 100;
 	private final int PADDLE_SPEED = 3;
-	private final int POW_DIAM=60;
+	private final int POW_DIAM=50;
 
 	
 	// your instance variables here, I've given you a few 
@@ -38,7 +39,7 @@ public class Pong extends JPanel implements KeyListener {
 	private boolean solo = false;
 	
 	private int bvx=(int) ((Math.random()*10)%2+1);
-	private int bvy=(int) ((Math.random()*10)%2+1);
+	private int bvy=(int) ((Math.random()*10)%2+2);
 	private int bx=WIDTH/2-DIAM/2;
 	private int by=HEIGHT/2-DIAM/2;
 	private int r1x=0;
@@ -51,6 +52,8 @@ public class Pong extends JPanel implements KeyListener {
 	private boolean pow=false;
 	private int powx=(int) ((Math.random()*500));
 	private int powy=(int) ((Math.random()*500)+20);
+	private boolean pow1=false;
+	private boolean pow2=false;
 	
 	
 	// move the ball according to its current velocity
@@ -62,7 +65,7 @@ public class Pong extends JPanel implements KeyListener {
 	        bx=bx+bvx;
 	        by=by+bvy;
 		}
-		if ((p1s+p2s)%3==0) {
+		if ((p1s+p2s)%2==0&&pow1==false&&pow2==false) {
 			pow=true;
 		}
 		else {
@@ -78,31 +81,31 @@ public class Pong extends JPanel implements KeyListener {
 				
 	//			r1y=by-PADDLE_HEIGHT/2; (Without while loops)
 				
-				while (r1y+PADDLE_HEIGHT/2<by&&r1y<HEIGHT-PADDLE_HEIGHT) {
+				while (r1y+PADDLE_HEIGHT/2<by&&r1y<HEIGHT-PADDLE_HEIGHT&&pow1==false) {
 					r1y+=PADDLE_SPEED;
 				}
-				while (r1y+PADDLE_HEIGHT/2>by&&r1y>0) {
+				while (r1y+PADDLE_HEIGHT/2>by&&r1y>0&&pow1==false) {
 					r1y-=PADDLE_SPEED;
 				}
 			}
-			if (up1==true&&r1y>0&&solo==false) {
+			if (up1==true&&r1y>0&&solo==false&&pow1==false) {
 				r1y=r1y-PADDLE_SPEED;
 				if (r1y<0){
 					r1y=r1y+PADDLE_SPEED;
 				}
 			}
-			if (down1==true&&r1y<HEIGHT-PADDLE_HEIGHT&&solo==false) {
+			if (down1==true&&r1y<HEIGHT-PADDLE_HEIGHT&&solo==false&&pow1==false) {
 				r1y=r1y+PADDLE_SPEED;
 				if (r1y>HEIGHT-PADDLE_HEIGHT){
 					r1y=r1y-PADDLE_SPEED;
 				}
 			}
 			
-			if (up2==true&&r2y>0) {
+			if (up2==true&&r2y>0&&pow2==false) {
 				r2y=r2y-PADDLE_SPEED;
 			}
 			
-			if (down2==true&&r2y<HEIGHT-PADDLE_HEIGHT) {
+			if (down2==true&&r2y<HEIGHT-PADDLE_HEIGHT&&pow2==false) {
 				r2y=r2y+PADDLE_SPEED;
 			}
 		}
@@ -115,14 +118,18 @@ public class Pong extends JPanel implements KeyListener {
 		
 		if (bx<r1x+PADDLE_WIDTH&&by<r1y+PADDLE_HEIGHT&&by>r1y) {
 			bvx=-(int) ((Math.random()*10)%2+1);
-			bvy=-(int) ((Math.random()*10)%2+1);
+			bvy=-(int) ((Math.random()*10)%2+2);
 			bvx=(int) (bvx*-1);
+			pow1=false;
+			pow2=false;
 		}
 		
 		if (bx>r2x-PADDLE_WIDTH&&by<r2y+PADDLE_HEIGHT&&by>r2y) {
 			bvx=(int) ((Math.random()*10)%2+1);
-			bvy=(int) ((Math.random()*10)%2+1);
+			bvy=(int) ((Math.random()*10)%2+2);
 			bvx=(int) (bvx*-1);
+			pow1=false;
+			pow2=false;
 		}
 
         if (bx + bvx < 0) {
@@ -133,6 +140,8 @@ public class Pong extends JPanel implements KeyListener {
         	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
         	bvx=(int) ((Math.random()*10)%2+1);
 			bvy=(int) ((Math.random()*10)%2+1);
+			pow1=false;
+			pow2=false;
         	pause=true;
         }
         
@@ -144,16 +153,19 @@ public class Pong extends JPanel implements KeyListener {
         	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
         	bvx=(int) ((Math.random()*10)%2+1);
 			bvy=(int) ((Math.random()*10)%2+1);
+			pow1=false;
+			pow2=false;
         	pause=true;
         }
         
         if (powx+POW_DIAM>bx&&powy+POW_DIAM>by&&powx-DIAM<bx&&powy-DIAM<by&&pow==true) {
         	if(bvx>0) {
-        		p1s=500;
+        		pow2=true;
         	}
         	if(bvx<0) {
-        		p2s=500;
+        		pow1=true;
         	}
+        	pow=false;
         }
         if (pow==false) {
         	powx=(int) ((Math.random()*500));
@@ -184,6 +196,7 @@ public class Pong extends JPanel implements KeyListener {
 			if (powx<51) {
 				powx+=50;
 			}
+			g.setColor(new Color(255,255,0));
 			g.fillRect(powx, powy, POW_DIAM, POW_DIAM);
 			g.drawRect(powx, powy, POW_DIAM, POW_DIAM);
 		}
@@ -276,6 +289,9 @@ public class Pong extends JPanel implements KeyListener {
     	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
     	powx=(int) ((Math.random()*500));
     	powy=(int) ((Math.random()*500)+20);
+    	pow1=false;
+    	pow2=false;
+    	pow=true;
     	solo=false;
 		pause=true;
 	}
