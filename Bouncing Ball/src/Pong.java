@@ -37,9 +37,8 @@ public class Pong extends JPanel implements KeyListener {
 	// your instance variables here, I've given you a few 
 	private boolean up1, down1, up2, down2; 		// booleans to keep track of paddle movement
 	private boolean solo = false;
-	
-	private int bvx=(int) ((Math.random()*10)%2+1);
-	private int bvy=(int) ((Math.random()*10)%2+2);
+	private int bvx=(int) ((Math.random()*10)%2+2);
+	private int bvy=(int) (((Math.random()*10)/2)-3);
 	private int bx=WIDTH/2-DIAM/2;
 	private int by=HEIGHT/2-DIAM/2;
 	private int r1x=0;
@@ -54,6 +53,7 @@ public class Pong extends JPanel implements KeyListener {
 	private int powy=(int) ((Math.random()*500)+20);
 	private boolean pow1=false;
 	private boolean pow2=false;
+	private int t=(int) -(Math.random()*10);
 	
 	
 	// move the ball according to its current velocity
@@ -65,7 +65,7 @@ public class Pong extends JPanel implements KeyListener {
 	        bx=bx+bvx;
 	        by=by+bvy;
 		}
-		if ((p1s+p2s)%2==0&&pow1==false&&pow2==false) {
+		if (pow1==false&&pow2==false&&t>3) {
 			pow=true;
 		}
 		else {
@@ -117,19 +117,37 @@ public class Pong extends JPanel implements KeyListener {
 	public void check_collisions() {
 		
 		if (bx<r1x+PADDLE_WIDTH&&by<r1y+PADDLE_HEIGHT&&by>r1y) {
-			bvx=-(int) ((Math.random()*10)%2+1);
-			bvy=-(int) ((Math.random()*10)%2+2);
+			bvx=-(int) ((Math.random()*10)%2+2);
 			bvx=(int) (bvx*-1);
+			if (bvy>0) {
+				bvy=(int)((Math.random()*10)/2);
+			}
+			if (bvy<0) {
+				bvy=(int)-((Math.random()*10)/2);
+			}
+			if (bvy==0) {
+				bvy=(int)(((Math.random()*10)%4)-2);
+			}
 			pow1=false;
 			pow2=false;
+			t+=1;
 		}
 		
 		if (bx>r2x-PADDLE_WIDTH&&by<r2y+PADDLE_HEIGHT&&by>r2y) {
-			bvx=(int) ((Math.random()*10)%2+1);
-			bvy=(int) ((Math.random()*10)%2+2);
+			bvx=(int) ((Math.random()*10)%2+2);
 			bvx=(int) (bvx*-1);
+			if (bvy>0) {
+				bvy=(int)((Math.random()*10)/2);
+			}
+			if (bvy<0) {
+				bvy=(int)-((Math.random()*10)/2);
+			}
+			if (bvy==0) {
+				bvy=(int)(((Math.random()*10)%4)-2);
+			}
 			pow1=false;
 			pow2=false;
+			t+=1;
 		}
 
         if (bx + bvx < 0) {
@@ -138,11 +156,12 @@ public class Pong extends JPanel implements KeyListener {
     		by=HEIGHT/2-DIAM/2;
     		r1y=HEIGHT/2-PADDLE_HEIGHT/2;
         	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
-        	bvx=(int) ((Math.random()*10)%2+1);
-			bvy=(int) ((Math.random()*10)%2+1);
+        	bvx=(int) ((Math.random()*10)%2+2);
+        	bvy=(int) (((Math.random()*10)/2)-3);
 			pow1=false;
 			pow2=false;
         	pause=true;
+        	t=(int) -(Math.random()*10);
         }
         
         if (bx + DIAM + bvx > WIDTH) {
@@ -151,11 +170,12 @@ public class Pong extends JPanel implements KeyListener {
     		by=HEIGHT/2-DIAM/2;
     		r1y=HEIGHT/2-PADDLE_HEIGHT/2;
         	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
-        	bvx=(int) ((Math.random()*10)%2+1);
-			bvy=(int) ((Math.random()*10)%2+1);
+        	bvx=(int) ((Math.random()*10)%2+2);
+        	bvy=(int) (((Math.random()*10)/2)-3);
 			pow1=false;
 			pow2=false;
         	pause=true;
+        	t=(int) -(Math.random()*10);
         }
         
         if (powx+POW_DIAM>bx&&powy+POW_DIAM>by&&powx-DIAM<bx&&powy-DIAM<by&&pow==true) {
@@ -283,12 +303,13 @@ public class Pong extends JPanel implements KeyListener {
 		p2s=0;
 		bx=WIDTH/2-DIAM/2;
 		by=HEIGHT/2-DIAM/2;
-		bvx=(int) ((Math.random()*10)%2+1);
-		bvy=(int) ((Math.random()*10)%2+1);
+		bvx=(int) ((Math.random()*10)%2+2);
+		bvy=(int) (((Math.random()*10)/2)-3);
 		r1y=HEIGHT/2-PADDLE_HEIGHT/2;
     	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
     	powx=(int) ((Math.random()*500));
     	powy=(int) ((Math.random()*500)+20);
+    	t=(int) -(Math.random()*10);
     	pow1=false;
     	pow2=false;
     	pow=true;
