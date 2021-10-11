@@ -36,24 +36,24 @@ public class Pong extends JPanel implements KeyListener {
 	
 	// your instance variables here, I've given you a few 
 	private boolean up1, down1, up2, down2; 		// booleans to keep track of paddle movement
-	private boolean solo = false;
-	private int bvx=(int) ((Math.random()*10)%2+2);
-	private int bvy=(int) (((Math.random()*10)/2)-3);
-	private int bx=WIDTH/2-DIAM/2;
-	private int by=HEIGHT/2-DIAM/2;
-	private int r1x=0;
-	private int r1y=HEIGHT/2-PADDLE_HEIGHT/2;
-	private int r2x=WIDTH-PADDLE_WIDTH;
-	private int r2y=HEIGHT/2-PADDLE_HEIGHT/2;
-	private int p1s=0;
-	private int p2s=0;
-	private boolean pause=true;
-	private boolean pow=false;
-	private int powx=(int) ((Math.random()*500));
-	private int powy=(int) ((Math.random()*500)+20);
-	private boolean pow1=false;
-	private boolean pow2=false;
-	private int t=(int) -(Math.random()*10);
+	private boolean solo = false; // solo mode boolean
+	private int bvx=(int) ((Math.random()*10)%2+2);  // ball x velocity
+	private int bvy=(int) (((Math.random()*10)/2)-3); // ball y velocity
+	private int bx=WIDTH/2-DIAM/2; // ball x coordinate
+	private int by=HEIGHT/2-DIAM/2; // ball y coordinate
+	private int r1x=0; //player 1 paddle/rectangle x coordinate
+	private int r1y=HEIGHT/2-PADDLE_HEIGHT/2; //player 1 paddle/rectangle y coordinate
+	private int r2x=WIDTH-PADDLE_WIDTH; //player 2 paddle/rectangle x coordinate
+	private int r2y=HEIGHT/2-PADDLE_HEIGHT/2; //player 2 paddle/rectangle y coordinate
+	private int p1s=0; // player 1 score
+	private int p2s=0; // player 2 score
+	private boolean pause=true; // pause boolean
+	private boolean pow=false; // powerup boolean
+	private int powx=(int) ((Math.random()*500)); // powerup x coordinate
+	private int powy=(int) ((Math.random()*500)+20); // powerup y coordinate
+	private boolean pow1=false; // powerup player 1 effect boolean
+	private boolean pow2=false; // powerup player 2 effect boolean
+	private int t=(int) -(Math.random()*10); //timer for powerup to appear
 	
 	
 	// move the ball according to its current velocity
@@ -65,6 +65,7 @@ public class Pong extends JPanel implements KeyListener {
 	        bx=bx+bvx;
 	        by=by+bvy;
 		}
+		// if statement to show the powerup
 		if (pow1==false&&pow2==false&&t>3) {
 			pow=true;
 		}
@@ -78,8 +79,8 @@ public class Pong extends JPanel implements KeyListener {
 	public void move_paddles() {
 		if (pause==false) {
 			if (solo==true) {
-				
-	//			r1y=by-PADDLE_HEIGHT/2; (Without while loops)
+				// solo mode
+	//			r1y=by-PADDLE_HEIGHT/2; (without while loops)
 				
 				while (r1y+PADDLE_HEIGHT/2<by&&r1y<HEIGHT-PADDLE_HEIGHT&&pow1==false) {
 					r1y+=PADDLE_SPEED;
@@ -87,7 +88,9 @@ public class Pong extends JPanel implements KeyListener {
 				while (r1y+PADDLE_HEIGHT/2>by&&r1y>0&&pow1==false) {
 					r1y-=PADDLE_SPEED;
 				}
+				// with while loops and checking if powerup effect (pow1) is true
 			}
+			// in 2 player mode, player 1 movement
 			if (up1==true&&r1y>0&&solo==false&&pow1==false) {
 				r1y=r1y-PADDLE_SPEED;
 				if (r1y<0){
@@ -100,7 +103,7 @@ public class Pong extends JPanel implements KeyListener {
 					r1y=r1y-PADDLE_SPEED;
 				}
 			}
-			
+			// player 2 movement 
 			if (up2==true&&r2y>0&&pow2==false) {
 				r2y=r2y-PADDLE_SPEED;
 			}
@@ -117,8 +120,9 @@ public class Pong extends JPanel implements KeyListener {
 	public void check_collisions() {
 		
 		if (bx<r1x+PADDLE_WIDTH&&by<r1y+PADDLE_HEIGHT&&by>r1y) {
-			bvx=-(int) ((Math.random()*10)%2+2);
-			bvx=(int) (bvx*-1);
+			bvx=-(int) ((Math.random()*10)%2+2); // makes ball's x velocity 2 or 3
+			bvx=(int) (bvx*-1); // bounces the ball
+			// make ball bouncing more realistic rather than just bouncing from 180 degrees to 1 degree
 			if (bvy>0) {
 				bvy=(int)((Math.random()*10)/2);
 			}
@@ -128,9 +132,9 @@ public class Pong extends JPanel implements KeyListener {
 			if (bvy==0) {
 				bvy=(int)(((Math.random()*10)%4)-2);
 			}
-			pow1=false;
+			pow1=false; // disable powerup effects
 			pow2=false;
-			t+=1;
+			t+=1; // add to counter for every hit
 		}
 		
 		if (bx>r2x-PADDLE_WIDTH&&by<r2y+PADDLE_HEIGHT&&by>r2y) {
@@ -148,20 +152,21 @@ public class Pong extends JPanel implements KeyListener {
 			pow1=false;
 			pow2=false;
 			t+=1;
+			// same as above except for player 2
 		}
 
         if (bx + bvx < 0) {
-        	p2s=p2s+1;
-        	bx=WIDTH/2-DIAM/2;
+        	p2s=p2s+1; // adds to score
+        	bx=WIDTH/2-DIAM/2; // resets ball location
     		by=HEIGHT/2-DIAM/2;
-    		r1y=HEIGHT/2-PADDLE_HEIGHT/2;
+    		r1y=HEIGHT/2-PADDLE_HEIGHT/2; //resets padddle locations
         	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
         	bvx=(int) ((Math.random()*10)%2+2);
         	bvy=(int) (((Math.random()*10)/2)-3);
-			pow1=false;
+			pow1=false; // resets powerup effects
 			pow2=false;
-        	pause=true;
-        	t=(int) -(Math.random()*10);
+        	pause=true; // pauses the game
+        	t=(int) -(Math.random()*10); // resets counter for powerup
         }
         
         if (bx + DIAM + bvx > WIDTH) {
@@ -175,21 +180,21 @@ public class Pong extends JPanel implements KeyListener {
 			pow1=false;
 			pow2=false;
         	pause=true;
-        	t=(int) -(Math.random()*10);
+        	t=(int) -(Math.random()*10); //same as above but for the other side
         }
         
-        if (powx+POW_DIAM>bx&&powy+POW_DIAM>by&&powx-DIAM<bx&&powy-DIAM<by&&pow==true) {
+        if (powx+POW_DIAM>bx&&powy+POW_DIAM>by&&powx-DIAM<bx&&powy-DIAM<by&&pow==true) { //checks for contact of powerup
         	if(bvx>0) {
-        		pow2=true;
+        		pow2=true; // makes powerup effect true
         	}
         	if(bvx<0) {
-        		pow1=true;
+        		pow1=true; // makes powerup effect true
         	}
         	pow=false;
         }
         if (pow==false) {
         	powx=(int) ((Math.random()*500));
-        	powy=(int) ((Math.random()*500)+20);
+        	powy=(int) ((Math.random()*500)+20); //randomizes powerup location
         }
 	}
 	
@@ -219,7 +224,7 @@ public class Pong extends JPanel implements KeyListener {
 			g.setColor(new Color(255,255,0));
 			g.fillRect(powx, powy, POW_DIAM, POW_DIAM);
 			g.drawRect(powx, powy, POW_DIAM, POW_DIAM);
-		}
+		} // makes powerup appear when boolean is true
 		
 		// writes the score of the game - you just need to fill the scores in
 		Font f = new Font("Arial", Font.BOLD, 14);
@@ -227,15 +232,15 @@ public class Pong extends JPanel implements KeyListener {
 		g.setColor(Color.red);
 		g.drawString("P1 Score: ", WIDTH/5, 20);
 		g.drawString("P2 Score: ", WIDTH*3/5, 20);
-		g.drawString(String.valueOf(p1s), WIDTH/5+100, 20);
-		g.drawString(String.valueOf(p2s), WIDTH*3/5+100, 20);
+		g.drawString(String.valueOf(p1s), WIDTH/5+100, 20); // player 1 score
+		g.drawString(String.valueOf(p2s), WIDTH*3/5+100, 20); // player 2 score
 		
 		if (pause==true) {
 			Font font = new Font("Arial", Font.BOLD, 20);
 			g.setFont(font);
 			g.setColor(Color.white);
 			g.drawString("game paused, click space to resume", WIDTH/5, HEIGHT/5);
-		}
+		} // text on pause screen
 	}
 	
 
@@ -269,10 +274,10 @@ public class Pong extends JPanel implements KeyListener {
 		
 		if (e.getKeyChar()==' ') {
 			pause=false;
-		}
+		} // resume button
 		if (e.getKeyChar()=='p') {
 			pause=true;
-		}
+		} // pause button
 	}
 
 	// defines what we want to happen if a keyboard button
@@ -315,6 +320,7 @@ public class Pong extends JPanel implements KeyListener {
     	pow=true;
     	solo=false;
 		pause=true;
+		// resets all variables 
 	}
 
 	//////////////////////////////////////
