@@ -53,6 +53,7 @@ public class Pong extends JPanel implements KeyListener {
 	private int powy=(int) ((Math.random()*500)+20); // powerup y coordinate
 	private boolean pow1=false; // powerup player 1 effect boolean
 	private boolean pow2=false; // powerup player 2 effect boolean
+	private int minpowx=50;
 	private int t=(int) -(Math.random()*10); //timer for powerup to appear
 	
 	
@@ -80,7 +81,6 @@ public class Pong extends JPanel implements KeyListener {
 		if (pause==false) {
 			if (solo==true) {
 				// solo mode
-	//			r1y=by-PADDLE_HEIGHT/2; (without while loops)
 				
 				while (r1y+PADDLE_HEIGHT/2<by&&r1y<HEIGHT-PADDLE_HEIGHT&&pow1==false) {
 					r1y+=PADDLE_SPEED;
@@ -175,7 +175,7 @@ public class Pong extends JPanel implements KeyListener {
     		by=HEIGHT/2-DIAM/2;
     		r1y=HEIGHT/2-PADDLE_HEIGHT/2;
         	r2y=HEIGHT/2-PADDLE_HEIGHT/2;
-        	bvx=(int) ((Math.random()*10)%2+2);
+        	bvx=(int) ((Math.random()*2)+2);
         	bvy=(int) (((Math.random()*10)/2)-3);
 			pow1=false;
 			pow2=false;
@@ -193,8 +193,8 @@ public class Pong extends JPanel implements KeyListener {
         	pow=false;
         }
         if (pow==false) {
-        	powx=(int) ((Math.random()*500));
-        	powy=(int) ((Math.random()*500)+20); //randomizes powerup location
+        	powx=(int) ((Math.random()*WIDTH*5/6));
+        	powy=(int) ((Math.random()*WIDTH*5/6)+DIAM); //randomizes powerup location
         }
 	}
 	
@@ -218,8 +218,8 @@ public class Pong extends JPanel implements KeyListener {
 		g.fillRect(r2x, r2y, PADDLE_WIDTH, PADDLE_HEIGHT);
 		g.drawRect(r2x, r2y, PADDLE_WIDTH, PADDLE_HEIGHT);
 		if (pow==true) {
-			if (powx<51) {
-				powx+=50;
+			if (powx<minpowx+1) {
+				powx+=minpowx;
 			}
 			g.setColor(new Color(255,255,0));
 			g.fillRect(powx, powy, POW_DIAM, POW_DIAM);
