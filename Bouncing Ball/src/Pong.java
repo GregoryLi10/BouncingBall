@@ -194,7 +194,7 @@ public class Pong extends JPanel implements KeyListener {
         }
         if (pow==false) {
         	powx=(int) ((Math.random()*WIDTH*5/6));
-        	powy=(int) ((Math.random()*WIDTH*5/6)+DIAM); //randomizes powerup location
+        	powy=(int) ((Math.random()*WIDTH*5/6)+DIAM); //randomizes powerup location but keeps it in the middle-ish of the screen
         }
 	}
 	
