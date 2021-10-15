@@ -224,6 +224,10 @@ public class Pong extends JPanel implements KeyListener {
 			g.setColor(new Color(255,255,0));
 			g.fillRect(powx, powy, POW_DIAM, POW_DIAM);
 			g.drawRect(powx, powy, POW_DIAM, POW_DIAM);
+			Font font = new Font("Arial", Font.BOLD, 20);
+			g.setFont(font);;
+			g.setColor(Color.white);
+			g.drawString("hit the yellow powerup to freeze the opponent's paddle", WIDTH/12, HEIGHT/5+100);
 		} // makes powerup appear when boolean is true
 		
 		// writes the score of the game - you just need to fill the scores in
