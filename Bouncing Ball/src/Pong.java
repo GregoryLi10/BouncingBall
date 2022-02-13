@@ -54,7 +54,7 @@ public class Pong extends JPanel implements KeyListener {
 	private boolean pow1=false; // powerup player 1 effect boolean
 	private boolean pow2=false; // powerup player 2 effect boolean
 	private int minpowx=50;
-	private int t=(int) -(Math.random()*10); //timer for powerup to appear
+	private int t=(int) -(Math.random()*3); //timer for powerup to appear
 	
 	
 	// move the ball according to its current velocity
@@ -68,7 +68,7 @@ public class Pong extends JPanel implements KeyListener {
 		}
 		// if statement to show the powerup
 		if (pow1==false&&pow2==false&&t>3) {
-			pow=true;
+			pow=true; 
 		}
 		else {
 			pow=false;
